@@ -1,11 +1,11 @@
 {
-	"id": "sample-plugin",
-	"name": "Sample Plugin",
+	"id": "obsidian-note-upload",
+	"name": "Obsidian SSH Note Upload",
 	"version": "1.0.0",
 	"minAppVersion": "0.15.0",
-	"description": "Demonstrates some of the capabilities of the Obsidian API.",
-	"author": "Obsidian",
-	"authorUrl": "https://obsidian.md",
+	"description": "Uploads the current note to a remote server via SSH.",
+	"author": "Alexander Welsing",
+	"authorUrl": "https://a-wels.de",
 	"fundingUrl": "https://obsidian.md/pricing",
 	"isDesktopOnly": false
 }
