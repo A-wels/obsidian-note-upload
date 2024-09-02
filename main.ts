@@ -129,6 +129,7 @@ class MyScpPluginSettingTab extends PluginSettingTab {
 				.onChange(async (value) => {
 					this.plugin.settings.remotePath = value;
 					await this.plugin.saveSettings
-  }
-
+				}
+			));
+			  }
 }
