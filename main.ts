@@ -31,32 +31,44 @@ export default class MyScpPlugin extends Plugin {
     this.addSettingTab(new MyScpPluginSettingTab(this.app, this));
   }
 
-  async uploadCurrentFile() {
-    const activeFile = this.app.workspace.getActiveFile();
-    if (!activeFile) {
-      console.error('No active file');
-      return;
-    }
 
-    const content = await this.app.vault.read(activeFile);
-    const ssh = new NodeSSH();
-
-    try {
-      await ssh.connect({
-        host: this.settings.serverAddress,
-        username: this.settings.username,
-        password: this.settings.password,
-      });
-	  // Create directory if it doesn't exist
-	  await ssh.execCommand(`mkdir -p ${this.settings.remotePath}`);
-      await ssh.putFile(content, `${this.settings.remotePath}/${activeFile.name}`);
-      console.log(`File ${activeFile.name} uploaded successfully`);
-    } catch (err) {
-      console.error('Error uploading file:', err);
-    } finally {
-      ssh.dispose();
-    }
+async uploadCurrentFile() {
+  const activeFile = app.workspace.getActiveFile()
+  if (!activeFile) {
+    console.error('No active file');
+    return;
   }
+  
+  const filePath = this.app.vault.adapter.getFullPath(activeFile.path)
+
+  let vaultName = this.app.vault.getName();
+  let relativeIndex = filePath.lastIndexOf(vaultName);
+  if (relativeIndex === -1) {
+    console.error('Vault name not found in file path');
+    return;
+  }
+  let relativePath = filePath.substring(relativeIndex + vaultName.length + 1);
+  console.log('Relative path:', relativePath);
+
+  const ssh = new NodeSSH()
+  try {
+    await ssh.connect({
+      host: this.settings.serverAddress,
+      username: this.settings.username,
+      password: this.settings.password,
+    });
+    // Create directory if it doesn't exist
+    await ssh.execCommand(`mkdir -p ${this.settings.remotePath}`);
+
+    // Upload the temporary file
+    await ssh.putFile(filePath, `${this.settings.remotePath}/${relativePath}`);
+    console.log(`File ${activeFile.name} uploaded successfully`);
+  } catch (err) {
+    console.error('Error uploading file:', err);
+  } finally {
+    ssh.dispose();
+  }
+}
 
   onunload() {
     console.log('Unloading MyScpPlugin');
