@@ -1,7 +1,7 @@
 import { Plugin, PluginSettingTab, Setting } from 'obsidian';
 import { NodeSSH } from 'node-ssh';
 
-interface MyScpPluginSettings {
+interface ScpNoteUploadSettings {
   serverAddress: string;
   username: string;
   password: string;
@@ -9,15 +9,15 @@ interface MyScpPluginSettings {
 }
 
 
-const DEFAULT_SETTINGS: MyScpPluginSettings = {
+const DEFAULT_SETTINGS: ScpNoteUploadSettings = {
   serverAddress: '',
   username: '',
   password: '',
   remotePath: ''
 };
 
-export default class MyScpPlugin extends Plugin {
-  settings: MyScpPluginSettings;
+export default class ScpNoteUpload extends Plugin {
+  settings: ScpNoteUploadSettings;
 
   async onload() {
     await this.loadSettings();
@@ -28,7 +28,7 @@ export default class MyScpPlugin extends Plugin {
       callback: () => this.uploadCurrentFile(),
     });
 
-    this.addSettingTab(new MyScpPluginSettingTab(this.app, this));
+    this.addSettingTab(new ScpNoteUploadSettingTab(this.app, this));
   }
 
 
@@ -48,7 +48,6 @@ async uploadCurrentFile() {
     return;
   }
   let relativePath = filePath.substring(relativeIndex + vaultName.length + 1);
-  console.log('Relative path:', relativePath);
 
   const ssh = new NodeSSH()
   try {
@@ -71,7 +70,7 @@ async uploadCurrentFile() {
 }
 
   onunload() {
-    console.log('Unloading MyScpPlugin');
+    console.log('Unloading ScpNoteUpload');
   }
 
   async loadSettings() {
@@ -83,10 +82,10 @@ async uploadCurrentFile() {
   }
 }
 
-class MyScpPluginSettingTab extends PluginSettingTab {
-  plugin: MyScpPlugin;
+class ScpNoteUploadSettingTab extends PluginSettingTab {
+  plugin: ScpNoteUpload;
 
-  constructor(app: any, plugin: MyScpPlugin) {
+  constructor(app: any, plugin: ScpNoteUpload) {
     super(app, plugin);
     this.plugin = plugin;
   }
@@ -96,7 +95,7 @@ class MyScpPluginSettingTab extends PluginSettingTab {
 
     containerEl.empty();
 
-    containerEl.createEl('h2', { text: 'Settings for SCP Upload Plugin' });
+    containerEl.createEl('h2', { text: 'Settings for SCP Note upload plugin' });
 
     new Setting(containerEl)
       .setName('Server Address')
