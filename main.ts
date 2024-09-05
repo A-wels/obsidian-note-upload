@@ -1,4 +1,4 @@
-import { Plugin, PluginSettingTab, Setting } from 'obsidian';
+import { Plugin, PluginSettingTab, Setting, Notice } from 'obsidian';
 import { NodeSSH } from 'node-ssh';
 
 interface ScpNoteUploadSettings {
@@ -33,9 +33,10 @@ export default class ScpNoteUpload extends Plugin {
 
 
 async uploadCurrentFile() {
-  const activeFile = app.workspace.getActiveFile()
+  const activeFile = this.app.workspace.getActiveFile()
   if (!activeFile) {
     console.error('No active file');
+	new Notice("No active file!");
     return;
   }
   
@@ -62,8 +63,10 @@ async uploadCurrentFile() {
     // Upload the temporary file
     await ssh.putFile(filePath, `${this.settings.remotePath}/${relativePath}`);
     console.log(`File ${activeFile.name} uploaded successfully`);
+	new Notice(`File ${activeFile.name} uploaded successfully`);
   } catch (err) {
     console.error('Error uploading file:', err);
+    new Notice('Error uploading file:', err);
   } finally {
     ssh.dispose();
   }
