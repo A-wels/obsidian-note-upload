@@ -6,6 +6,6 @@
 	"description": "Uploads the current note to a remote server via SCP",
 	"author": "Alexander Welsing",
 	"authorUrl": "https://a-wels.de",
-	"fundingUrl": "https://obsidian.md/pricing",
-	"isDesktopOnly": false
+	"fundingUrl": "https://www.paypal.com/paypalme/awelsSoftware",
+	"isDesktopOnly": true 
 }
