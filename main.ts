@@ -1,4 +1,4 @@
-import { Plugin, PluginSettingTab, Setting, Notice } from 'obsidian';
+import { Plugin, PluginSettingTab, Setting, Notice, FileSystemAdapter} from 'obsidian';
 import { NodeSSH } from 'node-ssh';
 
 interface ScpNoteUploadSettings {
@@ -39,8 +39,10 @@ async uploadCurrentFile() {
 	new Notice("No active file!");
     return;
   }
-  
-  const filePath = this.app.vault.adapter.getFullPath(activeFile.path)
+  let filePath  = ""
+if (this.app.vault.adapter instanceof FileSystemAdapter) {
+  filePath = this.app.vault.adapter.getFullPath(activeFile.path);
+}
 
   let vaultName = this.app.vault.getName();
   let relativeIndex = filePath.lastIndexOf(vaultName);
