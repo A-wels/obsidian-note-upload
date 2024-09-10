@@ -1,7 +1,7 @@
 {
 	"id": "obsidian-scp-note-upload",
 	"name": "SCP Note Upload",
-	"version": "1.0.1",
+	"version": "1.0.2",
 	"minAppVersion": "0.15.0",
 	"description": "Uploads the current note to a remote server via SCP",
 	"author": "Alexander Welsing",
